@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title h4 mb-4">Registrar Nueva Visita</h2>
+                
+                {% if error_msg %}
+                    <div class="alert alert-danger">{{ error_msg }}</div>
+                {% endif %}
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Tu Nombre</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required placeholder="Ej: Juan Pérez">
+                    </div>
+                    <div class="mb-3">
+                        <label for="mensaje" class="form-label">Mensaje</label>
+                        <textarea class="form-control" id="mensaje" name="mensaje" rows="4" required placeholder="Escribe un comentario o sugerencia..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100">Guardar Visita en AppSheet</button>
+                    <a href="{% url 'listar_visitas' %}" class="btn btn-link w-100 mt-2">Cancelar y volver</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

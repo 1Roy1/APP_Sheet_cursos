@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}{% if curso %}Editar Curso{% else %}Nuevo Curso{% endif %} - EduVirtual Hub{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0 mt-4">
+            <div class="card-body p-4">
+                <h2 class="card-title h4 mb-4 text-primary">{% if curso %}Editar Curso{% else %}Registrar Nuevo Curso{% endif %}</h2>
+                
+                {% if messages %}
+                <div class="mb-4">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre del Curso</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" value="{{ curso.Nombre|default:'' }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="categoria" class="form-label">Categoría</label>
+                        <select class="form-select" id="categoria" name="categoria" required>
+                            <option value="">Selecciona...</option>
+                            <option value="Tecnología" {% if curso.Categoria == 'Tecnología' %}selected{% endif %}>Tecnología</option>
+                            <option value="Ciencias" {% if curso.Categoria == 'Ciencias' %}selected{% endif %}>Ciencias</option>
+                            <option value="Arte" {% if curso.Categoria == 'Arte' %}selected{% endif %}>Arte</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_catedratico" class="form-label">Asignar Catedrático</label>
+                        <select class="form-select" id="id_catedratico" name="id_catedratico">
+                            <option value="">Ninguno</option>
+                            {% for cat in catedraticos %}
+                            <option value="{{ cat.Row_ID }}" {% if curso.ID_CATEDRATICO == cat.Row_ID %}selected{% endif %}>{{ cat.Nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="descripcion" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" rows="4" required>{{ curso.Descripcion|default:'' }}</textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100">Guardar Información en AppSheet</button>
+                    <a href="{% url 'curso_list' %}" class="btn btn-light w-100 mt-2 border">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
